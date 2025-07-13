@@ -151,4 +151,4 @@ pnpm run dev
 
 ## 📜 License
 
-This project is open-source and licensed under the **MIT License**.
+This project is not open-source.
