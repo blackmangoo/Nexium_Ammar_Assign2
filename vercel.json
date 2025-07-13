@@ -4,11 +4,6 @@
       "NODE_ENV": "production"
     }
   },
-  "dev": {
-    "framework": "parcel",
-    "distDir": "dist",
-    "command": "pnpm start"
-  },
   "installCommand": "pnpm install",
   "buildCommand": "parcel build public/index.html",
   "outputDirectory": "dist",
