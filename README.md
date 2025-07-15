@@ -1,45 +1,71 @@
+# Blog Summariser & Translator
 
-# 📰 Blog Summariser & Translator
+Live Demo: [https://nexium-ammar-assign2-redoo.vercel.app/](https://nexium-ammar-assign2-redoo.vercel.app/)
 
-**Live Demo:** [Click to Visit](https://nexium-ammar-assign2-redoo.vercel.app/)
+## Introduction
 
-A modern web application that simplifies content consumption by summarizing blog articles and optionally translating them into Urdu. Built with **React**, **Tailwind CSS**, and **Supabase**, the app demonstrates a full-stack implementation of web scraping, text processing, translation, and database integration.
+The **Blog Summariser & Translator** is a web application that allows users to:
 
----
+- Input a blog URL
+- Extract its core text content
+- Generate a concise summary
+- Translate that summary into Urdu
 
-## ✨ Features
-
-- 🕵️ **Smart Blog Scraping:** Extracts readable text from any blog URL using `jsdom`.
-- 🧠 **Simulated AI Summarization:** Generates a basic summary from the cleaned content.
-- 🌐 **English to Urdu Translation:** Offers a basic word-to-word Urdu translation.
-- 💾 **Database Storage:** Saves the blog URL and summary in **Supabase** (PostgreSQL).
-- 💻 **Modern UI:** Clean and responsive interface styled with **Tailwind CSS** and inspired by **ShadCN**.
-- ☁️ **Vercel Deployment:** Easily deployed with serverless functions and environment variables.
+This full-stack project demonstrates modern development practices including web scraping, API routing, frontend/backend communication, and integration with Supabase for data persistence.
 
 ---
 
-## 🛠️ Tech Stack
+## Features
 
-### Frontend
-- **React** – UI development
-- **Parcel** – Zero-config bundler
-- **Tailwind CSS** – Utility-first styling
+- **🔍 Web Scraping**
 
-### Backend (API)
-- **Node.js** & **Express.js** – For scraping endpoint
-- **jsdom** – Parses HTML to extract text
-- **node-fetch** – To fetch blog content
+  - Fetches text from a blog URL using a Node.js API proxy to bypass CORS.
 
-### Database
-- **Supabase** – Stores blog URL & summaries
-- **MongoDB (Simulated)** – Placeholder for storing full article text
+- **🧠 Intelligent Text Extraction**
 
-### Deployment
-- **Vercel** – Frontend & serverless backend deployment
+  - Uses `jsdom` to parse HTML and clean unwanted content like scripts, styles, and common nav/meta sections.
+
+- **✨ Simulated AI Summary**
+
+  - Extracts initial sentences of the blog text to simulate a summary.
+
+- **🌍 English to Urdu Translation**
+
+  - Provides a basic dictionary-based word-by-word translation.
+
+- **🕛 Data Persistence**
+
+  - Saves blog URL and summary in Supabase.
+  - Simulates saving full text in MongoDB (console log only).
+
+- **📈 Modern UI**
+
+  - React + Tailwind CSS for a responsive, clean interface (ShadCN-like aesthetics).
+
+- **🌐 Vercel Deployment**
+
+  - Optimized for deployment using serverless functions.
 
 ---
 
-## 🗂️ Project Structure
+## 🔧 Technical Stack
+
+| Tech                | Purpose                           |
+| ------------------- | --------------------------------- |
+| React               | Frontend UI                       |
+| Parcel              | Bundler                           |
+| Tailwind CSS        | Styling                           |
+| Node.js             | Backend runtime                   |
+| Express.js          | Local server                      |
+| jsdom               | HTML parsing                      |
+| node-fetch          | HTTP requests                     |
+| Supabase            | PostgreSQL-based DB for summaries |
+| MongoDB (simulated) | Placeholder for full text storage |
+| Vercel              | Deployment (frontend + backend)   |
+
+---
+
+## 📂 Project Structure
 
 ```
 Nexium_Ammar_Assign2/
@@ -52,103 +78,124 @@ Nexium_Ammar_Assign2/
 ├── .env                   # Supabase credentials (local only)
 ├── package.json           # Project config & dependencies
 ├── vercel.json            # Vercel config
-├── README.md              # You're reading it!
-└── ...
+└── README.md              # You're reading it!
 ```
 
 ---
 
-## 🚀 Getting Started (Local Setup)
+## 💡 Getting Started (Local Development)
 
-### 📦 Prerequisites
-- Node.js (v18+ recommended)
+### Prerequisites
+
+- Node.js (v18+)
 - pnpm (`npm install -g pnpm`)
 - Git
 - Supabase account
 
-### 🔧 Setup Steps
+### Setup
 
-1. **Clone the Repository**
+#### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/blackmangoo/Nexium_Ammar_Assign2.git
 cd Nexium_Ammar_Assign2
 ```
 
-2. **Install Dependencies**
+#### 2. Install Dependencies
+
 ```bash
 pnpm install
 ```
 
-3. **Configure Supabase**
-- Create a table named `summaries` with:
-  - `id` (UUID, PK, default: `gen_random_uuid()`)
+#### 3. Configure Supabase
+
+- Create a Supabase project.
+- Go to **Table Editor** > Create table `summaries` with:
+  - `id` (uuid, PK, default: `gen_random_uuid()`)
   - `url` (text)
   - `summary_text` (text)
   - `full_text` (text)
   - `created_at` (timestamp, default: `now()`)
+- Go to **Project Settings** > **API**:
+  - Copy Project URL & Anon Public Key
 
-- Navigate to **Project Settings → API** to get your:
-  - `SUPABASE_URL`
-  - `SUPABASE_ANON_KEY`
+#### 4. Create `.env` File (Local Only)
 
-4. **Create a `.env` File**
-```env
-SUPABASE_URL=your_supabase_url
-SUPABASE_ANON_KEY=your_anon_key
+Create a `.env` file in the project root:
+
+```
+PARCEL_SUPABASE_URL=https://your-project-ref.supabase.co
+PARCEL_SUPABASE_ANON_KEY=your_actual_anon_public_key_here
 ```
 
-5. **Run the App**
+Note: On Vercel, use `SUPABASE_URL` and `SUPABASE_ANON_KEY` (without `PARCEL_` prefix).
+
+#### 5. Run the App
+
 ```bash
 pnpm run dev
 ```
 
-- Frontend: [http://localhost:1234](http://localhost:1234)
-- API Server: [http://localhost:3001](http://localhost:3001)
+- Frontend: `http://localhost:1234`
+- API Server: `http://localhost:3001`
 
 ---
 
-## ⚙️ How It Works
+## 📆 How It Works
 
-1. **User Inputs a Blog URL**
-2. **Frontend Sends Request to /api/scrape**
-3. **Backend Scrapes and Cleans the Text**
-4. **Summary Generated by Extracting Initial Sentences**
-5. **(Optional) Urdu Translation via Simple Dictionary**
-6. **Blog URL + Summary Stored in Supabase**
-7. **UI Updates to Show Results**
+1. User enters a blog URL
+2. Frontend sends POST to `/api/scrape`
+3. Backend fetches and cleans article content
+4. Summary is generated (first few sentences)
+5. Urdu translation (if selected)
+6. URL + summary saved to Supabase
+7. UI displays result
 
 ---
 
-## 🌍 Deployment (Vercel)
+## 🌐 Deployment (Vercel)
 
-1. **Push to GitHub**
-2. **Import Project to Vercel**
-3. **Add Environment Variables**
-   - `SUPABASE_URL`
-   - `SUPABASE_ANON_KEY`
-4. **Deploy!**
+### 1. Link GitHub Repository
+
+- Log in to Vercel
+- Click **New Project** > Import your repo
+
+### 2. Add Environment Variables
+
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+
+### 3. Deploy
+
+Click **Deploy** — Vercel builds and hosts your app.
 
 ---
 
 ## ⚠️ Known Limitations
 
-- 🔸 Summarization is static and not powered by real LLMs.
-- 🔸 Urdu translation is dictionary-based, not contextual.
-- 🔸 MongoDB functionality is simulated (not integrated).
-- 🔸 Advanced scraping for dynamic websites is not handled.
-- 🔸 No user authentication or history view yet.
+- Summary logic is static (no real AI)
+- Urdu translation is dictionary-based
+- MongoDB integration is simulated
+- Web scraping limited to basic pages
+- No user login/history features
 
 ---
 
-## 🛣️ Future Improvements
+## ✨ Future Enhancements
 
-- Integrate **Gemini API** or **OpenAI** for real summarization.
-- Use **Google Translate API** or **DeepL** for accurate Urdu translation.
-- Implement **MongoDB Atlas** for full text storage.
-- Add **login system** and **summary history tracking**.
+- Real summarization (Gemini or OpenAI)
+- Real translation API (Google Translate, DeepL)
+- Integrate MongoDB Atlas
+- Add authentication and summary history
+- Improve scraping for complex websites
 
 ---
 
-## 📜 License
+## 📅 License
 
-This project is not open-source.
+This project is **not open-source**.
+
+---
+
+Made with ❤️ by Ammar Akbar
+
