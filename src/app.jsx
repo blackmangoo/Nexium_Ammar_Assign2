@@ -1,14 +1,25 @@
 import React, { useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
-// Supabase Configuration (REPLACE WITH YOUR ACTUAL KEYS from Supabase Project Settings -> API)
-const SUPABASE_URL = 'https://eouhqcsnfkcqygfhnocp.supabase.co'; // This is your Supabase project URL
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVvdWhxY3NuZmtjcXlnZmhub2NwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI0MjUzODMsImV4cCI6MjA2ODAwMTM4M30.Km5eEgNk9aMoB0VnL2YCqbpOHMxbtUMYmTtPGvCsdcg'; // This is your public 'anon' key
+// Supabase Configuration
+// IMPORTANT: For local development with Parcel, ensure your .env variables are prefixed with PARCEL_
+// e.g., PARCEL_SUPABASE_URL="YOUR_SUPABASE_URL"
+// For Vercel deployment, you set SUPABASE_URL and SUPABASE_ANON_KEY directly in Vercel's environment variables (without PARCEL_ prefix).
+// This line tries to get the variable with PARCEL_ prefix (for local) or without (for Vercel).
+const SUPABASE_URL = process.env.PARCEL_SUPABASE_URL || process.env.SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.PARCEL_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
 
 // Initialize Supabase client
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// Simple English to Urdu dictionary for demonstration
+// --- DEBUGGING AID: Log Supabase URLs ---
+// Check your browser's console (F12) after running 'pnpm run dev' to see these values.
+console.log('Supabase URL (resolved):', SUPABASE_URL);
+console.log('Supabase Anon Key (resolved, first few chars):', SUPABASE_ANON_KEY ? SUPABASE_ANON_KEY.substring(0, 5) + '...' : 'Not set');
+// --- END DEBUGGING AID ---
+
+
+// Simple English to Urdu dictionary for demonstration (Re-added as per project features)
 const englishToUrduDictionary = {
   "hello": "ہیلو",
   "world": "دنیا",
@@ -1011,6 +1022,7 @@ const englishToUrduDictionary = {
   "inc": "Inc.",
   "power": "پاور",
   "ventures": "وینچرز",
+  "2012": "2012",
   "district": "ضلعی",
   "court": "عدالت",
   "ruled": "فیصلہ کیا",
@@ -1443,8 +1455,7 @@ const englishToUrduDictionary = {
   "partial": "جزوی",
   "access": "رسائی",
   "limit": "محدود کریں",
-  "crawl": "کرال",
-  "rate": "شرح",
+  "crawl": "شرح",
   "specify": "مخصوص کریں",
   "optimal": "بہترین",
   "time": "وقت",
@@ -1559,6 +1570,11 @@ const App = () => {
       setSummary(simulatedSummary);
 
       // --- Step 3: Save Summary to Supabase; Simulate Full Text Save to MongoDB ---
+      // Ensure Supabase URL and Anon Key are correctly loaded from environment variables
+      if (!SUPABASE_URL || !SUPABASE_ANON_KEY || SUPABASE_URL === 'undefined' || SUPABASE_ANON_KEY === 'undefined') {
+        throw new Error("Supabase URL or Anon Key is not configured. Please check your .env file (for local) or Vercel environment variables (for deployment).");
+      }
+
       const { data, error } = await supabase
         .from('summaries') // Your Supabase table name
         .insert([
@@ -1583,7 +1599,7 @@ const App = () => {
     }
   };
 
-  // NEW: Function to handle Urdu translation
+  // NEW: Function to handle Urdu translation (Re-added as per project features)
   const handleTranslateToUrdu = () => {
     if (summary.trim() === '') {
       showMessage("Please generate a summary first before translating.");
@@ -1595,15 +1611,15 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 flex items-center justify-center p-4 font-inter">
-      <div className="w-full max-w-lg bg-gray-800 rounded-xl shadow-lg p-6 space-y-6 md:p-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-center text-purple-400 mb-6">
+    <div className="min-h-screen bg-gray-950 text-gray-100 flex items-center justify-center p-4 font-inter">
+      <div className="w-full max-w-2xl bg-gray-800 rounded-2xl shadow-2xl p-8 space-y-8 border border-gray-700">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-center text-purple-400 mb-6 drop-shadow-lg">
           Blog Summariser
         </h1>
 
         {/* URL Input Section */}
-        <div className="space-y-4">
-          <label htmlFor="blog-url-input" className="block text-sm font-medium text-gray-300">
+        <div className="space-y-5">
+          <label htmlFor="blog-url-input" className="block text-base font-medium text-gray-300">
             Enter Blog URL:
           </label>
           <input
@@ -1612,21 +1628,21 @@ const App = () => {
             value={blogUrl}
             onChange={(e) => setBlogUrl(e.target.value)}
             placeholder="e.g., https://example.com/blog-post"
-            className="flex h-10 w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50 text-gray-200"
+            className="flex h-12 w-full rounded-lg border border-gray-600 bg-gray-900 px-4 py-2 text-base placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50 text-gray-200 shadow-md transition-all duration-200"
             disabled={loading}
           />
-          <div className="flex flex-col sm:flex-row gap-3 mt-4"> {/* Buttons container */}
+          <div className="flex flex-col sm:flex-row gap-4 mt-4">
             <button
               onClick={handleSummarize}
-              className="flex-1 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-gray-900 bg-purple-600 text-white hover:bg-purple-700 h-10 px-4 py-2 shadow-md"
+              className="flex-1 inline-flex items-center justify-center rounded-lg text-base font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-gray-900 bg-purple-700 text-white hover:bg-purple-800 h-12 px-6 py-3 shadow-lg transform hover:scale-105 active:scale-95 duration-200"
               disabled={loading}
             >
               {loading ? 'Summarising...' : 'Summarise Blog'}
             </button>
-            {/* NEW: Translate to Urdu Button */}
+            {/* Re-added "Translate to Urdu" button */}
             <button
               onClick={handleTranslateToUrdu}
-              className="flex-1 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-gray-900 bg-blue-600 text-white hover:bg-blue-700 h-10 px-4 py-2 shadow-md"
+              className="flex-1 inline-flex items-center justify-center rounded-lg text-base font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-gray-900 bg-blue-700 text-white hover:bg-blue-800 h-12 px-6 py-3 shadow-lg transform hover:scale-105 active:scale-95 duration-200"
               disabled={loading || !summary} // Disable if loading or no summary
             >
               Translate to Urdu 🌐
@@ -1636,49 +1652,49 @@ const App = () => {
 
         {/* Summary Display Section */}
         {loading && (
-          <div className="text-center text-gray-400 mt-6">
+          <div className="text-center text-gray-400 mt-8 text-lg animate-pulse">
             Fetching and summarising, please wait...
           </div>
         )}
 
         {!loading && summary && (
-          <div className="space-y-4 mt-6">
-            <h2 className="text-xl font-semibold text-gray-200 text-center mb-2">Summary (English):</h2>
-            <div className="rounded-lg border border-gray-700 bg-gray-900 p-4 shadow-sm">
-              <p className="text-gray-300 leading-relaxed">{summary}</p>
+          <div className="space-y-4 mt-8 p-6 bg-gray-700 rounded-xl shadow-inner border border-gray-600">
+            <h2 className="text-2xl font-bold text-gray-200 text-center mb-4">Summary (English):</h2>
+            <div className="rounded-lg border border-gray-600 bg-gray-900 p-5 shadow-md">
+              <p className="text-gray-300 leading-relaxed text-lg">{summary}</p>
             </div>
           </div>
         )}
 
-        {/* NEW: Urdu Summary Display Section */}
+        {/* Re-added Urdu Summary Display Section */}
         {!loading && urduSummary && (
-          <div className="space-y-4 mt-6">
-            <h2 className="text-xl font-semibold text-gray-200 text-center mb-2">خلاصہ (اردو):</h2>
-            <div className="rounded-lg border border-gray-700 bg-gray-900 p-4 shadow-sm">
-              <p className="text-gray-300 leading-relaxed text-right">{urduSummary}</p> {/* text-right for Urdu */}
+          <div className="space-y-4 mt-8 p-6 bg-gray-700 rounded-xl shadow-inner border border-gray-600">
+            <h2 className="text-2xl font-bold text-gray-200 text-center mb-4">خلاصہ (اردو):</h2>
+            <div className="rounded-lg border border-gray-600 bg-gray-900 p-5 shadow-md">
+              <p className="text-gray-300 leading-relaxed text-lg text-right font-['Noto_Nastaliq_Urdu']">{urduSummary}</p> {/* text-right for Urdu */}
             </div>
           </div>
         )}
 
         {/* Full Text Display (Optional for debugging/verification) */}
         {!loading && fullText && (
-          <div className="space-y-4 mt-6">
-            <h2 className="text-xl font-semibold text-gray-200 text-center mb-2">Full Scraped Text:</h2>
-            <div className="rounded-lg border border-gray-700 bg-gray-900 p-4 shadow-sm max-h-60 overflow-y-auto">
-              <pre className="text-gray-400 text-sm whitespace-pre-wrap">{fullText}</pre>
+          <div className="space-y-4 mt-8 p-6 bg-gray-700 rounded-xl shadow-inner border border-gray-600">
+            <h2 className="text-2xl font-bold text-gray-200 text-center mb-4">Full Scraped Text:</h2>
+            <div className="rounded-lg border border-gray-600 bg-gray-900 p-5 shadow-md max-h-80 overflow-y-auto">
+              <pre className="text-gray-400 text-sm whitespace-pre-wrap font-mono">{fullText}</pre>
             </div>
           </div>
         )}
 
         {/* Message Modal */}
         {isMessageModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-gray-800 rounded-lg p-6 shadow-xl max-w-sm w-full space-y-4">
-              <h3 className="text-lg font-semibold text-gray-100">Notification</h3>
-              <p className="text-gray-300">{message}</p>
+          <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+            <div className="bg-gray-800 rounded-xl p-8 shadow-2xl max-w-md w-full space-y-6 border border-gray-700 transform scale-100 animate-fade-in">
+              <h3 className="text-2xl font-bold text-gray-100 text-center">Notification</h3>
+              <p className="text-gray-300 text-center text-lg">{message}</p>
               <button
                 onClick={closeMessageModal}
-                className="w-full inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-gray-900 bg-purple-600 text-white hover:bg-purple-700 h-10 px-4 py-2 shadow-md"
+                className="w-full inline-flex items-center justify-center rounded-lg text-base font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-gray-900 bg-purple-700 text-white hover:bg-purple-800 h-12 px-6 py-3 shadow-lg transform hover:scale-105 active:scale-95 duration-200"
               >
                 OK
               </button>

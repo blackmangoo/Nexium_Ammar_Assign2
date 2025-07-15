@@ -24962,12 +24962,21 @@ var _react = require("react");
 var _reactDefault = parcelHelpers.interopDefault(_react);
 var _supabaseJs = require("@supabase/supabase-js");
 var _s = $RefreshSig$();
-// Supabase Configuration (REPLACE WITH YOUR ACTUAL KEYS from Supabase Project Settings -> API)
-const SUPABASE_URL = 'https://eouhqcsnfkcqygfhnocp.supabase.co'; // This is your Supabase project URL
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVvdWhxY3NuZmtjcXlnZmhub2NwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI0MjUzODMsImV4cCI6MjA2ODAwMTM4M30.Km5eEgNk9aMoB0VnL2YCqbpOHMxbtUMYmTtPGvCsdcg'; // This is your public 'anon' key
+// Supabase Configuration
+// IMPORTANT: For local development with Parcel, ensure your .env variables are prefixed with PARCEL_
+// e.g., PARCEL_SUPABASE_URL="YOUR_SUPABASE_URL"
+// For Vercel deployment, you set SUPABASE_URL and SUPABASE_ANON_KEY directly in Vercel's environment variables (without PARCEL_ prefix).
+// This line tries to get the variable with PARCEL_ prefix (for local) or without (for Vercel).
+const SUPABASE_URL = "https://eouhqcsnfkcqygfhnocp.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVvdWhxY3NuZmtjcXlnZmhub2NwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI0MjUzODMsImV4cCI6MjA2ODAwMTM4M30.Km5eEgNk9aMoB0VnL2YCqbpOHMxbtUMYmTtPGvCsdcg";
 // Initialize Supabase client
 const supabase = (0, _supabaseJs.createClient)(SUPABASE_URL, SUPABASE_ANON_KEY);
-// Simple English to Urdu dictionary for demonstration
+// --- DEBUGGING AID: Log Supabase URLs ---
+// Check your browser's console (F12) after running 'pnpm run dev' to see these values.
+console.log('Supabase URL (resolved):', SUPABASE_URL);
+console.log('Supabase Anon Key (resolved, first few chars):', SUPABASE_ANON_KEY ? SUPABASE_ANON_KEY.substring(0, 5) + '...' : 'Not set');
+// --- END DEBUGGING AID ---
+// Simple English to Urdu dictionary for demonstration (Re-added as per project features)
 const englishToUrduDictionary = {
     "hello": "\u06C1\u06CC\u0644\u0648",
     "world": "\u062F\u0646\u06CC\u0627",
@@ -25970,6 +25979,7 @@ const englishToUrduDictionary = {
     "inc": "Inc.",
     "power": "\u067E\u0627\u0648\u0631",
     "ventures": "\u0648\u06CC\u0646\u0686\u0631\u0632",
+    "2012": "2012",
     "district": "\u0636\u0644\u0639\u06CC",
     "court": "\u0639\u062F\u0627\u0644\u062A",
     "ruled": "\u0641\u06CC\u0635\u0644\u06C1 \u06A9\u06CC\u0627",
@@ -26402,8 +26412,7 @@ const englishToUrduDictionary = {
     "partial": "\u062C\u0632\u0648\u06CC",
     "access": "\u0631\u0633\u0627\u0626\u06CC",
     "limit": "\u0645\u062D\u062F\u0648\u062F \u06A9\u0631\u06CC\u06BA",
-    "crawl": "\u06A9\u0631\u0627\u0644",
-    "rate": "\u0634\u0631\u062D",
+    "crawl": "\u0634\u0631\u062D",
     "specify": "\u0645\u062E\u0635\u0648\u0635 \u06A9\u0631\u06CC\u06BA",
     "optimal": "\u0628\u06C1\u062A\u0631\u06CC\u0646",
     "time": "\u0648\u0642\u062A",
@@ -26510,6 +26519,8 @@ const App = ()=>{
             const simulatedSummary = scrapedContent.split('. ').slice(0, 3).join('. ') + '.';
             setSummary(simulatedSummary);
             // --- Step 3: Save Summary to Supabase; Simulate Full Text Save to MongoDB ---
+            // Ensure Supabase URL and Anon Key are correctly loaded from environment variables
+            if (!SUPABASE_URL || !SUPABASE_ANON_KEY || SUPABASE_URL === 'undefined' || SUPABASE_ANON_KEY === 'undefined') throw new Error("Supabase URL or Anon Key is not configured. Please check your .env file (for local) or Vercel environment variables (for deployment).");
             const { data, error } = await supabase.from('summaries') // Your Supabase table name
             .insert([
                 {
@@ -26533,7 +26544,7 @@ const App = ()=>{
             setLoading(false);
         }
     };
-    // NEW: Function to handle Urdu translation
+    // NEW: Function to handle Urdu translation (Re-added as per project features)
     const handleTranslateToUrdu = ()=>{
         if (summary.trim() === '') {
             showMessage("Please generate a summary first before translating.");
@@ -26544,28 +26555,28 @@ const App = ()=>{
         showMessage("Summary translated to Urdu!");
     };
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-        className: "min-h-screen bg-gray-900 text-gray-100 flex items-center justify-center p-4 font-inter",
+        className: "min-h-screen bg-gray-950 text-gray-100 flex items-center justify-center p-4 font-inter",
         children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-            className: "w-full max-w-lg bg-gray-800 rounded-xl shadow-lg p-6 space-y-6 md:p-8",
+            className: "w-full max-w-2xl bg-gray-800 rounded-2xl shadow-2xl p-8 space-y-8 border border-gray-700",
             children: [
                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h1", {
-                    className: "text-3xl md:text-4xl font-bold text-center text-purple-400 mb-6",
+                    className: "text-4xl md:text-5xl font-extrabold text-center text-purple-400 mb-6 drop-shadow-lg",
                     children: "Blog Summariser"
                 }, void 0, false, {
                     fileName: "src/app.jsx",
-                    lineNumber: 1600,
+                    lineNumber: 1616,
                     columnNumber: 9
                 }, undefined),
                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                    className: "space-y-4",
+                    className: "space-y-5",
                     children: [
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
                             htmlFor: "blog-url-input",
-                            className: "block text-sm font-medium text-gray-300",
+                            className: "block text-base font-medium text-gray-300",
                             children: "Enter Blog URL:"
                         }, void 0, false, {
                             fileName: "src/app.jsx",
-                            lineNumber: 1606,
+                            lineNumber: 1622,
                             columnNumber: 11
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
@@ -26574,206 +26585,205 @@ const App = ()=>{
                             value: blogUrl,
                             onChange: (e)=>setBlogUrl(e.target.value),
                             placeholder: "e.g., https://example.com/blog-post",
-                            className: "flex h-10 w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50 text-gray-200",
+                            className: "flex h-12 w-full rounded-lg border border-gray-600 bg-gray-900 px-4 py-2 text-base placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50 text-gray-200 shadow-md transition-all duration-200",
                             disabled: loading
                         }, void 0, false, {
                             fileName: "src/app.jsx",
-                            lineNumber: 1609,
+                            lineNumber: 1625,
                             columnNumber: 11
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                            className: "flex flex-col sm:flex-row gap-3 mt-4",
+                            className: "flex flex-col sm:flex-row gap-4 mt-4",
                             children: [
-                                " ",
                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
                                     onClick: handleSummarize,
-                                    className: "flex-1 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-gray-900 bg-purple-600 text-white hover:bg-purple-700 h-10 px-4 py-2 shadow-md",
+                                    className: "flex-1 inline-flex items-center justify-center rounded-lg text-base font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-gray-900 bg-purple-700 text-white hover:bg-purple-800 h-12 px-6 py-3 shadow-lg transform hover:scale-105 active:scale-95 duration-200",
                                     disabled: loading,
                                     children: loading ? 'Summarising...' : 'Summarise Blog'
                                 }, void 0, false, {
                                     fileName: "src/app.jsx",
-                                    lineNumber: 1619,
+                                    lineNumber: 1635,
                                     columnNumber: 13
                                 }, undefined),
                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
                                     onClick: handleTranslateToUrdu,
-                                    className: "flex-1 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-gray-900 bg-blue-600 text-white hover:bg-blue-700 h-10 px-4 py-2 shadow-md",
+                                    className: "flex-1 inline-flex items-center justify-center rounded-lg text-base font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-gray-900 bg-blue-700 text-white hover:bg-blue-800 h-12 px-6 py-3 shadow-lg transform hover:scale-105 active:scale-95 duration-200",
                                     disabled: loading || !summary,
                                     children: "Translate to Urdu \uD83C\uDF10"
                                 }, void 0, false, {
                                     fileName: "src/app.jsx",
-                                    lineNumber: 1627,
+                                    lineNumber: 1643,
                                     columnNumber: 13
                                 }, undefined)
                             ]
                         }, void 0, true, {
                             fileName: "src/app.jsx",
-                            lineNumber: 1618,
+                            lineNumber: 1634,
                             columnNumber: 11
                         }, undefined)
                     ]
                 }, void 0, true, {
                     fileName: "src/app.jsx",
-                    lineNumber: 1605,
+                    lineNumber: 1621,
                     columnNumber: 9
                 }, undefined),
                 loading && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                    className: "text-center text-gray-400 mt-6",
+                    className: "text-center text-gray-400 mt-8 text-lg animate-pulse",
                     children: "Fetching and summarising, please wait..."
                 }, void 0, false, {
                     fileName: "src/app.jsx",
-                    lineNumber: 1639,
+                    lineNumber: 1655,
                     columnNumber: 11
                 }, undefined),
                 !loading && summary && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                    className: "space-y-4 mt-6",
+                    className: "space-y-4 mt-8 p-6 bg-gray-700 rounded-xl shadow-inner border border-gray-600",
                     children: [
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
-                            className: "text-xl font-semibold text-gray-200 text-center mb-2",
+                            className: "text-2xl font-bold text-gray-200 text-center mb-4",
                             children: "Summary (English):"
                         }, void 0, false, {
                             fileName: "src/app.jsx",
-                            lineNumber: 1646,
+                            lineNumber: 1662,
                             columnNumber: 13
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                            className: "rounded-lg border border-gray-700 bg-gray-900 p-4 shadow-sm",
+                            className: "rounded-lg border border-gray-600 bg-gray-900 p-5 shadow-md",
                             children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                                className: "text-gray-300 leading-relaxed",
+                                className: "text-gray-300 leading-relaxed text-lg",
                                 children: summary
                             }, void 0, false, {
                                 fileName: "src/app.jsx",
-                                lineNumber: 1648,
+                                lineNumber: 1664,
                                 columnNumber: 15
                             }, undefined)
                         }, void 0, false, {
                             fileName: "src/app.jsx",
-                            lineNumber: 1647,
+                            lineNumber: 1663,
                             columnNumber: 13
                         }, undefined)
                     ]
                 }, void 0, true, {
                     fileName: "src/app.jsx",
-                    lineNumber: 1645,
+                    lineNumber: 1661,
                     columnNumber: 11
                 }, undefined),
                 !loading && urduSummary && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                    className: "space-y-4 mt-6",
+                    className: "space-y-4 mt-8 p-6 bg-gray-700 rounded-xl shadow-inner border border-gray-600",
                     children: [
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
-                            className: "text-xl font-semibold text-gray-200 text-center mb-2",
+                            className: "text-2xl font-bold text-gray-200 text-center mb-4",
                             children: "\u062E\u0644\u0627\u0635\u06C1 (\u0627\u0631\u062F\u0648):"
                         }, void 0, false, {
                             fileName: "src/app.jsx",
-                            lineNumber: 1656,
+                            lineNumber: 1672,
                             columnNumber: 13
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                            className: "rounded-lg border border-gray-700 bg-gray-900 p-4 shadow-sm",
+                            className: "rounded-lg border border-gray-600 bg-gray-900 p-5 shadow-md",
                             children: [
                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                                    className: "text-gray-300 leading-relaxed text-right",
+                                    className: "text-gray-300 leading-relaxed text-lg text-right font-['Noto_Nastaliq_Urdu']",
                                     children: urduSummary
                                 }, void 0, false, {
                                     fileName: "src/app.jsx",
-                                    lineNumber: 1658,
+                                    lineNumber: 1674,
                                     columnNumber: 15
                                 }, undefined),
                                 " "
                             ]
                         }, void 0, true, {
                             fileName: "src/app.jsx",
-                            lineNumber: 1657,
+                            lineNumber: 1673,
                             columnNumber: 13
                         }, undefined)
                     ]
                 }, void 0, true, {
                     fileName: "src/app.jsx",
-                    lineNumber: 1655,
+                    lineNumber: 1671,
                     columnNumber: 11
                 }, undefined),
                 !loading && fullText && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                    className: "space-y-4 mt-6",
+                    className: "space-y-4 mt-8 p-6 bg-gray-700 rounded-xl shadow-inner border border-gray-600",
                     children: [
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
-                            className: "text-xl font-semibold text-gray-200 text-center mb-2",
+                            className: "text-2xl font-bold text-gray-200 text-center mb-4",
                             children: "Full Scraped Text:"
                         }, void 0, false, {
                             fileName: "src/app.jsx",
-                            lineNumber: 1666,
+                            lineNumber: 1682,
                             columnNumber: 13
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                            className: "rounded-lg border border-gray-700 bg-gray-900 p-4 shadow-sm max-h-60 overflow-y-auto",
+                            className: "rounded-lg border border-gray-600 bg-gray-900 p-5 shadow-md max-h-80 overflow-y-auto",
                             children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("pre", {
-                                className: "text-gray-400 text-sm whitespace-pre-wrap",
+                                className: "text-gray-400 text-sm whitespace-pre-wrap font-mono",
                                 children: fullText
                             }, void 0, false, {
                                 fileName: "src/app.jsx",
-                                lineNumber: 1668,
+                                lineNumber: 1684,
                                 columnNumber: 15
                             }, undefined)
                         }, void 0, false, {
                             fileName: "src/app.jsx",
-                            lineNumber: 1667,
+                            lineNumber: 1683,
                             columnNumber: 13
                         }, undefined)
                     ]
                 }, void 0, true, {
                     fileName: "src/app.jsx",
-                    lineNumber: 1665,
+                    lineNumber: 1681,
                     columnNumber: 11
                 }, undefined),
                 isMessageModalOpen && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                    className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4",
+                    className: "fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4 backdrop-blur-sm",
                     children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                        className: "bg-gray-800 rounded-lg p-6 shadow-xl max-w-sm w-full space-y-4",
+                        className: "bg-gray-800 rounded-xl p-8 shadow-2xl max-w-md w-full space-y-6 border border-gray-700 transform scale-100 animate-fade-in",
                         children: [
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
-                                className: "text-lg font-semibold text-gray-100",
+                                className: "text-2xl font-bold text-gray-100 text-center",
                                 children: "Notification"
                             }, void 0, false, {
                                 fileName: "src/app.jsx",
-                                lineNumber: 1677,
+                                lineNumber: 1693,
                                 columnNumber: 15
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                                className: "text-gray-300",
+                                className: "text-gray-300 text-center text-lg",
                                 children: message
                             }, void 0, false, {
                                 fileName: "src/app.jsx",
-                                lineNumber: 1678,
+                                lineNumber: 1694,
                                 columnNumber: 15
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
                                 onClick: closeMessageModal,
-                                className: "w-full inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-gray-900 bg-purple-600 text-white hover:bg-purple-700 h-10 px-4 py-2 shadow-md",
+                                className: "w-full inline-flex items-center justify-center rounded-lg text-base font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-gray-900 bg-purple-700 text-white hover:bg-purple-800 h-12 px-6 py-3 shadow-lg transform hover:scale-105 active:scale-95 duration-200",
                                 children: "OK"
                             }, void 0, false, {
                                 fileName: "src/app.jsx",
-                                lineNumber: 1679,
+                                lineNumber: 1695,
                                 columnNumber: 15
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/app.jsx",
-                        lineNumber: 1676,
+                        lineNumber: 1692,
                         columnNumber: 13
                     }, undefined)
                 }, void 0, false, {
                     fileName: "src/app.jsx",
-                    lineNumber: 1675,
+                    lineNumber: 1691,
                     columnNumber: 11
                 }, undefined)
             ]
         }, void 0, true, {
             fileName: "src/app.jsx",
-            lineNumber: 1599,
+            lineNumber: 1615,
             columnNumber: 7
         }, undefined)
     }, void 0, false, {
         fileName: "src/app.jsx",
-        lineNumber: 1598,
+        lineNumber: 1614,
         columnNumber: 5
     }, undefined);
 };
